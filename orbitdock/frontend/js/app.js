@@ -151,6 +151,10 @@ const App = {
     if (backdrop) backdrop.classList.remove("open");
     LogsViewerComponent.close();
     TerminalComponent.close();
+    if (typeof ContainerDetailComponent !== "undefined" && ContainerDetailComponent.metricsSocket) {
+      ContainerDetailComponent.metricsSocket.close();
+      ContainerDetailComponent.metricsSocket = null;
+    }
   },
 
   async openContainerDetails(containerId) {

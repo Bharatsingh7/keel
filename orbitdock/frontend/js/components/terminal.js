@@ -12,7 +12,7 @@ const TerminalComponent = {
 
     drawerBody.innerHTML = `
       <div style="display: flex; flex-direction: column; height: 100%;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span class="badge badge-emerald">Interactive PTY</span>
             <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">${shell}</span>
@@ -22,6 +22,17 @@ const TerminalComponent = {
             <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="TerminalComponent.switchShell('/bin/sh')">Switch to Sh</button>
             <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="TerminalComponent.clearTerminal()">Clear</button>
           </div>
+        </div>
+
+        <!-- Quick Command Chips Toolbar -->
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Quick Run:</span>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('ls -la')">ls -la</button>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('ps aux')">ps aux</button>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('df -h')">df -h</button>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('free -m')">free -m</button>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('env')">env</button>
+          <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; font-family: var(--font-mono);" onclick="TerminalComponent.runCommand('cat /etc/os-release')">os-release</button>
         </div>
 
         <div id="xterm-container" class="terminal-wrapper" style="flex: 1; min-height: 500px;"></div>
@@ -117,6 +128,15 @@ const TerminalComponent = {
     const cols = this.term.cols;
     const rows = this.term.rows;
     this.socket.send(JSON.stringify({ type: "resize", cols, rows }));
+  },
+
+  runCommand(cmd) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(cmd + "\n");
+    }
+    if (this.term) {
+      this.term.focus();
+    }
   },
 
   switchShell(shell) {

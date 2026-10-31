@@ -12,7 +12,7 @@ from orbitdock.backend.core.database import log_event
 from orbitdock.backend.smart.diagnostics import analyze_container_failure
 from orbitdock.backend.smart.security import audit_container_security
 from orbitdock.backend.smart.advisor import check_host_port_available, evaluate_resource_optimization
-from orbitdock.backend.smart.composerize import container_to_docker_run
+from orbitdock.backend.smart.composerize import container_to_docker_run, docker_run_to_compose
 
 router = APIRouter(prefix="/api/containers", tags=["containers"])
 logger = logging.getLogger("orbitdock.containers")
@@ -53,15 +53,21 @@ def get_container_details(container_id: str):
         diagnostics = analyze_container_failure(attrs, recent_logs)
         security_audit = audit_container_security(attrs)
 
-        # Generate copyable docker run command
+        # Generate copyable docker run command and compose YAML
         docker_run_cmd = container_to_docker_run(attrs)
+        compose_yaml = ""
+        try:
+            compose_yaml = docker_run_to_compose(docker_run_cmd).get("compose_yaml", "")
+        except Exception:
+            pass
 
         return {
             "summary": summary,
             "attrs": attrs,
             "diagnostics": diagnostics,
             "security": security_audit,
-            "docker_run_cmd": docker_run_cmd
+            "docker_run_cmd": docker_run_cmd,
+            "compose_yaml": compose_yaml
         }
     except NotFound:
         raise HTTPException(status_code=404, detail="Container not found")

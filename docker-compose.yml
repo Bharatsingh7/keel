@@ -1,0 +1,15 @@
+services:
+  orbitdock:
+    build: .
+    container_name: orbitdock
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - orbitdock_data:/root/.orbitdock
+    environment:
+      - ORBITDOCK_PORT=9090
+
+volumes:
+  orbitdock_data:

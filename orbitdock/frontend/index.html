@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbitDock — Next-Gen Container Platform</title>
+  <link rel="stylesheet" href="/static/css/orbitdock.css">
+  <link rel="stylesheet" href="/static/js/vendor/xterm.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app-layout">
+    <!-- Sidebar (Apple macOS Acrylic Glass) -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3.6 9h16.8"/>
+            <path d="M3.6 15h16.8"/>
+            <path d="M12 3a15 15 0 0 1 0 18"/>
+          </svg>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center;">
+            <span class="brand-title">OrbitDock</span>
+            <span class="brand-version">v1.0</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="#containers" class="nav-item" data-view="containers">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Containers
+        </a>
+        <a href="#stacks" class="nav-item" data-view="stacks">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Compose Stacks
+        </a>
+        <a href="#images" class="nav-item" data-view="images">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Images
+        </a>
+        <a href="#volumes" class="nav-item" data-view="volumes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><ellipse cx="12" cy="5" rx="9" ry="3"/></svg>
+          Volumes
+        </a>
+        <a href="#networks" class="nav-item" data-view="networks">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+          Networks
+        </a>
+        <a href="#advisor" class="nav-item" data-view="advisor">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Smart Advisor
+        </a>
+      </nav>
+
+      <div style="border-top: 1px solid var(--glass-border); padding-top: 16px; margin-top: auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-emerald);"></div>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Socket Connected</span>
+          </div>
+          <button id="theme-toggle-btn" class="btn btn-secondary btn-icon" title="Toggle Light/Dark Theme">
+            <svg id="theme-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main class="main-viewport">
+      <!-- OneUI Focus Header Banner -->
+      <header class="top-header">
+        <div class="header-left">
+          <h1 id="page-heading">Platform Overview</h1>
+          <p id="page-subheading">Docker Daemon connected at unix:///var/run/docker.sock</p>
+        </div>
+
+        <div class="header-actions">
+          <!-- Circular Progress Rings (Samsung OneUI Style) -->
+          <div class="gauges-container">
+            <div class="gauge-item" title="Host CPU Utilization">
+              <svg class="gauge-svg" viewBox="0 0 32 32">
+                <circle class="gauge-bg" cx="16" cy="16" r="13"></circle>
+                <circle class="gauge-val" id="gauge-cpu-circle" cx="16" cy="16" r="13"></circle>
+              </svg>
+              <div>
+                <div class="gauge-label">CPU</div>
+                <div class="gauge-num" id="gauge-cpu-text">0%</div>
+              </div>
+            </div>
+
+            <div class="gauge-item" title="Host RAM Utilization">
+              <svg class="gauge-svg" viewBox="0 0 32 32">
+                <circle class="gauge-bg" cx="16" cy="16" r="13"></circle>
+                <circle class="gauge-val" id="gauge-ram-circle" cx="16" cy="16" r="13"></circle>
+              </svg>
+              <div>
+                <div class="gauge-label">RAM</div>
+                <div class="gauge-num" id="gauge-ram-text">0%</div>
+              </div>
+            </div>
+
+            <div class="gauge-item" title="Host Disk Utilization">
+              <svg class="gauge-svg" viewBox="0 0 32 32">
+                <circle class="gauge-bg" cx="16" cy="16" r="13"></circle>
+                <circle class="gauge-val" id="gauge-disk-circle" cx="16" cy="16" r="13"></circle>
+              </svg>
+              <div>
+                <div class="gauge-label">DISK</div>
+                <div class="gauge-num" id="gauge-disk-text">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Container Area -->
+      <div id="main-content-view" style="flex: 1;">
+        <!-- Injected dynamically by Router -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Slide-Over Drawer for Logs, Terminal, and Container Details -->
+  <div id="main-drawer-backdrop" class="drawer-backdrop" onclick="if(event.target === this) App.closeDrawer()">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h3 id="drawer-title" style="font-size: 1.15rem; font-weight: 700;">Details</h3>
+        <button class="btn btn-secondary btn-icon" onclick="App.closeDrawer()">✕</button>
+      </div>
+      <div id="drawer-body" class="drawer-body">
+        <!-- Content rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Modal Window (Create Container, Composerize, Stacks, Pull) -->
+  <div id="main-modal-backdrop" class="modal-backdrop" onclick="if(event.target === this) App.closeModal()">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="modal-title" style="font-size: 1.15rem; font-weight: 700;">Modal</h3>
+        <button class="btn btn-secondary btn-icon" onclick="App.closeModal()">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+      <div id="modal-footer" class="modal-footer">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/vendor/xterm.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/components/dashboard.js"></script>
+  <script src="/static/js/components/containers.js"></script>
+  <script src="/static/js/components/container_detail.js"></script>
+  <script src="/static/js/components/logs_viewer.js"></script>
+  <script src="/static/js/components/terminal.js"></script>
+  <script src="/static/js/components/container_modal.js"></script>
+  <script src="/static/js/components/composerize_modal.js"></script>
+  <script src="/static/js/components/images.js"></script>
+  <script src="/static/js/components/volumes_networks.js"></script>
+  <script src="/static/js/components/stacks.js"></script>
+  <script src="/static/js/components/smart_advisor.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

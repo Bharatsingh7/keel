@@ -50,6 +50,14 @@ FAILURE_PATTERNS = [
         "suggested_fix": "Verify that the dependent container is running, attached to the same Docker network, and healthy.",
         "remediation_action": "check_network",
         "severity": "warning"
+    },
+    {
+        "pattern": r"(RWLayer of container .* is unexpectedly nil|snapshot .* does not exist: not found)",
+        "title": "Stale Container Snapshot Layer",
+        "root_cause": "The container instance's temporary containerd snapshot layer was lost during an OS reinstall or unclean daemon shutdown, although its persistent volumes remain intact.",
+        "suggested_fix": "Recreate the container instance using its existing volume mounts to reconnect with persistent data.",
+        "remediation_action": "recreate_container",
+        "severity": "critical"
     }
 ]
 

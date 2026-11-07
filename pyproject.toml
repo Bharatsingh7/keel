@@ -1,7 +1,7 @@
 [project]
-name = "orbitdock"
+name = "keel"
 version = "1.0.0"
-description = "Next-Generation Intelligent Docker Container Platform"
+description = "Keel (formerly OrbitDock) — Intelligent Docker Container & Fleet Platform"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -16,6 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
+keel = "orbitdock.main:main"
 orbitdock = "orbitdock.main:main"
 
 [build-system]

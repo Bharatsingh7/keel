@@ -14,7 +14,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 # Copy project files
 COPY pyproject.toml /app/
-RUN uv pip install --system --no-cache -r <(uv pip compile pyproject.toml)
+RUN uv pip compile pyproject.toml -o requirements.txt && \
+    uv pip install --system --no-cache -r requirements.txt
 
 COPY orbitdock/ /app/orbitdock/
 
